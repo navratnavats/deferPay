@@ -1,19 +1,23 @@
+
 use deferpay;
+
+
 -- USERS TABLE
 CREATE TABLE users (
-                       id CHAR(36) PRIMARY KEY,
+                       id int PRIMARY KEY,
                        first_name VARCHAR(100),
                        last_name VARCHAR(100),
                        email VARCHAR(150) UNIQUE NOT NULL,
                        phone VARCHAR(20) UNIQUE NOT NULL,
+                       username VARCHAR(36) UNIQUE NOT NULL,
                        credit_limit DECIMAL(10, 2) DEFAULT 10000,
                        available_credit_limit DECIMAL(10, 2) DEFAULT 10000,
                        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- MERCHANTS TABLE
 CREATE TABLE merchants (
-                           id CHAR(36) PRIMARY KEY,
+                           id int PRIMARY KEY,
                            name VARCHAR(100) NOT NULL,
                            email VARCHAR(150) UNIQUE NOT NULL,
                            phone VARCHAR(20) UNIQUE NOT NULL,
@@ -22,7 +26,7 @@ CREATE TABLE merchants (
 
 -- PRODUCTS TABLE
 CREATE TABLE products (
-                          id CHAR(36) PRIMARY KEY,
+                          id int PRIMARY KEY,
                           name VARCHAR(100) NOT NULL,
                           cost DECIMAL(10, 2) NOT NULL,
                           quantity INT NOT NULL,
@@ -33,7 +37,7 @@ CREATE TABLE products (
 
 -- ORDERS TABLE
 CREATE TABLE orders (
-                        id CHAR(36) PRIMARY KEY,
+                        id int PRIMARY KEY,
                         user_id CHAR(36) REFERENCES users(id),
                         merchant_id CHAR(36) REFERENCES merchants(id),
                         amount DECIMAL(10, 2) NOT NULL,
@@ -44,7 +48,7 @@ CREATE TABLE orders (
 
 -- ORDER ITEMS TABLE
 CREATE TABLE order_items (
-                             id CHAR(36) PRIMARY KEY,
+                             id int PRIMARY KEY,
                              order_id CHAR(36) REFERENCES orders(id),
                              product_id CHAR(36) REFERENCES products(id),
                              product_name VARCHAR(100),
@@ -54,7 +58,7 @@ CREATE TABLE order_items (
 
 -- BNPL TABLE
 CREATE TABLE bnpl (
-                              id CHAR(36) PRIMARY KEY,
+                              id int PRIMARY KEY,
                               user_id CHAR(36) REFERENCES users(id),
                               order_id CHAR(36) UNIQUE REFERENCES orders(id),
                               amount DECIMAL(10, 2),
@@ -67,7 +71,7 @@ CREATE TABLE bnpl (
 
 -- PAYMENTS TABLE
 CREATE TABLE payments (
-                          id CHAR(36) PRIMARY KEY,
+                          id int PRIMARY KEY,
                           user_id CHAR(36) REFERENCES users(id),
                           order_id CHAR(36) REFERENCES orders(id),
                           amount DECIMAL(10, 2),

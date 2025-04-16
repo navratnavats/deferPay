@@ -12,7 +12,7 @@ import java.util.*;
 @AllArgsConstructor
 @Builder
 public class BNPLDao {
-    private UUID id;
+    private Long id;
     private UUID userId;
     private UUID orderId;
     private Double amount;

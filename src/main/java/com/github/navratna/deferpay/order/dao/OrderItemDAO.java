@@ -11,7 +11,7 @@ import java.util.*;
 @AllArgsConstructor
 @Builder
 public class OrderItemDAO {
-    private UUID id;
+    private Long id;
     private UUID orderId;
     private UUID productId;
     private String productName;

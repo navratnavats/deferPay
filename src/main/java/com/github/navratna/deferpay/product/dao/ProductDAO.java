@@ -11,7 +11,7 @@ import java.util.*;
 @AllArgsConstructor
 @Builder
 public class ProductDAO {
-    private UUID id;
+    private Long id;
     private String name;
     private Double cost;
     private int quantity;

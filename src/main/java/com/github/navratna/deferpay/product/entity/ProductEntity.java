@@ -18,7 +18,7 @@ import java.util.UUID;
 @Builder
 public class ProductEntity {
     @Id
-    private UUID id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)    private Long id;
 
     private String name;
     private Double cost;

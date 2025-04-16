@@ -13,7 +13,7 @@ import java.util.*;
 @AllArgsConstructor
 @Builder
 public class OrderDAO {
-    private UUID id;
+    private Long id;
     private UUID userId;
     private UUID merchantId;
     private Double amount;

@@ -1,96 +1,78 @@
-Absolutely! Below is a clean and RESTful **API design** for your BNPL system covering **Users,
-Merchants, Products, Orders, BNPL, and Repayments**.
 
-I'll break them down by **entity/module** so you can easily implement them in Spring Boot:
 
----
 
-## 🔐 **Auth APIs (JWT-based)**
-```
-POST   /api/auth/signup         → Register (User or Merchant based on role)
-POST   /api/auth/login          → Login and get JWT token
-```
 
----
+User (/api/v1/user/)
+    create - create user profile (/create) : usercreaterequest : POST
+    me - view user profile (/) : username : GET
+    credit-limit : view credit limit(/credit-limit) :username : GET
+    available-limit : view available limit (/available-limit) : username : GET
+    orders : view my orders (/orders) : username : GET
+    orderStatus: view order status wise (/order-status) : username : GET
+    paymentStatus: view payment by status (/payment-status) : username : GET
+    paymentType : view payment by type (/payment-type) : username : GET
 
-## 👤 **User APIs**
-```
-GET    /api/users/me                    → Get my profile
-GET    /api/users/me/credit             → View current credit and available balance
-GET    /api/users/me/orders             → List all orders (BNPL & regular)
-GET    /api/users/me/repayments         → View repayment history
-POST   /api/users/me/repayments/{id}    → Repay for a BNPL order
-```
+UserCreateRequest
+    firstname
+    lastname
+    phone
+    email
 
----
+Product(/api/v1/product)
+    add : add product (/add) : add request : POST
+    getdetails : get product details for particular merchant (/details) : request : GET
+    viewCost : view specific product cost for particular merchant (/cost) : request : GET
+    viewQtyLeft : view product qty left for particular merchant (/qty) : request : GET
+    update: update a product for particular merchant (/modify) : request : PUT
+    delete : delete a specific product for particular merchant (/delete) : request : DELETE
+    compare: compare minimun price for a product on merchant (/compare) : request (only productType) : GET
+    viewProductType: view the product provided by all the merchants (/view-products) : request(onlu productType) : GET
 
-## 🏪 **Merchant APIs**
-```
-POST   /api/merchants                   → Register a new merchant (optional if signup handles this)
-GET    /api/merchants                   → Get list of merchants
-GET    /api/merchants/{id}             → Get merchant details
-```
+request:
+    productID
+    merchantID
+    MerchantType
+    ProductType
+    
+Merchant(/api/v1/merchant)
+    add : add merchant (/add) : add request : POST
+    getDetails : get merchant details  (/details) : request : GET
+    viewProductsForMerchant : view all products for the merchant  (/cost) : request : GET
+    update: update a merchant for  (/modify) : request : PUT
+    delete : delete a specific merchant  (/delete) : request : DELETE
+    getAllMerchant : get All merchant (/) : GET
 
----
+request:
+    merchantId
+    
 
-## 📦 **Product APIs**
-```
-POST   /api/merchants/{id}/products     → Add a product under a merchant
-PUT    /api/products/{productId}        → Update product
-DELETE /api/products/{productId}        → Delete product
-GET    /api/products                    → Search products (by name/category/merchant)
-GET    /api/products/{productId}        → View single product detail
-```
+Order(/api/v1/order)
+    place: place order from cart (/place) : request : POST
+    getOrderDetail : get order detail : request : GET
+    getOrderStatusWise : get order status wise (/status) : request : GET
+    getMerchantOrder : get orders wrt merchant (/merchant) : merchantId : GET
+    cancelOrder : cancel an order (/cancel) : request : POST
 
----
+request
+    orderId
 
-## 🛒 **Order & Cart APIs**
-```
-POST   /api/cart/add                    → Add item to user cart
-POST   /api/cart/remove                 → Remove item from cart
-GET    /api/cart                        → View current cart
 
-POST   /api/orders                      → Place order from cart
-GET    /api/orders/{id}                 → Get order detail
-```
+Transaction(/ap1/v1/transaction)
+    paynow: make payment now (/paynow) : request(order_id) : POST
+    bnpl: make bnpl payment (/bnpl) : request(order_id) : POST
+    
 
----
+BNPL(/api/v1/bnpl)
+    repayment : repayment Global for a particular user (/repayment) : request : POST
+    repaymentOrderId : repay particular order for a particular user (/repayment/order) : request : POST
+    bnplOrderView : view a particular bnpl Order for particular user (/user/order) : request : GET
+    bnplAllOrderView : view all BNPL order : request (/orders): GET
+    bnplOrderStatus : view order wrt status (/order-status) : request : GET
 
-## 💳 **Payment / BNPL APIs**
-```
-POST   /api/payments/paynow            → Make instant full payment
-POST   /api/payments/bnpl              → Use BNPL (deduct from credit, create due)
-GET    /api/bnpl/dues                  → View pending dues (user-specific)
-GET    /api/bnpl/dues/{id}             → View specific BNPL detail
-POST   /api/bnpl/dues/{id}/repay       → Repay a specific due
-```
 
----
+BNPLControllerRequest
+    username
+    amount
+    orderID
 
-## 📊 **Admin APIs (Optional)**
-```
-GET    /api/admin/users                → View all users
-PATCH  /api/admin/users/{id}/credit    → Update user credit limit
-GET    /api/admin/analytics            → View system-level metrics
-```
 
----
-
-### 🗂 Example Entity Mapping
-| Entity    | Endpoint Prefix       | Role Access         |
-|-----------|------------------------|----------------------|
-| User      | `/api/users`           | Authenticated User   |
-| Merchant  | `/api/merchants`       | Merchant Role Only   |
-| Product   | `/api/products`        | Merchant & Public    |
-| Order     | `/api/orders`          | Authenticated User   |
-| BNPL      | `/api/bnpl`            | Authenticated User   |
-| Payment   | `/api/payments`        | Authenticated User   |
-
----
-
-Would you like me to generate:
-- OpenAPI (Swagger) spec?
-- Spring Controller interfaces for all these?
-- A DB schema to match these APIs?
-
-Let me know how you'd like to proceed.

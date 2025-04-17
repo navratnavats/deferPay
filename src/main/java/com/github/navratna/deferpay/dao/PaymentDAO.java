@@ -1,0 +1,22 @@
+package com.github.navratna.deferpay.dao;
+
+import com.github.navratna.deferpay.common.PaymentStatus;
+import com.github.navratna.deferpay.common.PaymentType;
+import lombok.*;
+
+import java.time.LocalDateTime;
+import java.util.*;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+public class PaymentDAO {
+    private Long id;
+    private UUID userId;
+    private UUID orderId;
+    private Double amount;
+    private PaymentType type;
+    private PaymentStatus status;
+    private LocalDateTime paidAt;
+}
